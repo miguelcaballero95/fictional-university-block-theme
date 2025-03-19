@@ -193,6 +193,56 @@ function make_note_private( $data, $postarr ) {
 }
 add_filter( 'wp_insert_post_data', 'make_note_private', 10, 2 );
 
+
+class Placeholder_Block {
+
+	private string $name;
+
+
+	/**
+	 * JSX_Block constructor.
+	 *
+	 * @param string $name
+	 */
+	public function __construct( $name ) {
+		$this->name = $name;
+		add_action( 'init', [ $this, 'register_block' ] );
+	}
+
+	/**
+	 * Register the block
+	 */
+	public function register_block(): void {
+		wp_register_script(
+			"$this->name-block-js",
+			get_template_directory_uri() . "/blocks/$this->name.js",
+			[ 'wp-blocks', 'wp-editor' ]
+		);
+
+
+		register_block_type( "fu-block-theme/$this->name", [ 
+			'editor_script' => "$this->name-block-js",
+			'render_callback' => [ $this, 'block_render' ]
+		] );
+	}
+
+	/**
+	 * Render the block
+	 *
+	 * @param array $attributes
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public function block_render( array $attributes, string $content ): string {
+		ob_start();
+		require get_template_directory() . "/blocks/$this->name.php";
+		return ob_get_clean();
+	}
+}
+
+new Placeholder_Block( 'events-and-blogs' );
+
 class JSX_Block {
 
 	private string $name;
