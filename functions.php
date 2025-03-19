@@ -242,6 +242,8 @@ class Placeholder_Block {
 }
 
 new Placeholder_Block( 'events-and-blogs' );
+new Placeholder_Block( 'header' );
+new Placeholder_Block( 'footer' );
 
 class JSX_Block {
 
@@ -302,3 +304,5 @@ class JSX_Block {
 new JSX_Block( 'banner', true, [ 'fallbackImage' => get_theme_file_uri( '/images/library-hero.jpg' ) ] );
 new JSX_Block( 'generic-heading' );
 new JSX_Block( 'generic-button' );
+new JSX_Block( 'slideshow', true );
+new JSX_Block( 'slide', true, [ 'fallbackImage' => get_theme_file_uri( '/images/library-hero.jpg' ) ] );
