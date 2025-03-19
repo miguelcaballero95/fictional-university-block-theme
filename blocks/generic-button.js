@@ -1,8 +1,9 @@
-import { RichText, BlockControls, __experimentalLinkControl as LinkControl } from '@wordpress/block-editor';
+import { RichText, InspectorControls, BlockControls, __experimentalLinkControl as LinkControl, getColorObjectByColorValue } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
-import { ToolbarGroup, ToolbarButton, Popover, Button } from '@wordpress/components';
+import { ToolbarGroup, ToolbarButton, Popover, Button, PanelBody, PanelRow, ColorPalette } from '@wordpress/components';
 import { link } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
+import colors from '../inc/colors';
 
 registerBlockType('fu-block-theme/generic-button', {
     title: 'Generic Button',
@@ -16,6 +17,13 @@ registerBlockType('fu-block-theme/generic-button', {
         },
         linkObject: {
             type: 'object',
+            default: {
+                url: ''
+            }
+        },
+        color: {
+            type: 'string',
+            default: 'blue'
         }
     },
     edit: EditComponent,
@@ -25,6 +33,8 @@ registerBlockType('fu-block-theme/generic-button', {
 function EditComponent(props) {
 
     const [isLinkPickerVisible, setIsLinkPickerVisible] = useState(false);
+
+    const currentColorValue = colors.filter((color) => color.name === props.attributes.color)[0].color;
 
     return (
         <>
@@ -53,9 +63,26 @@ function EditComponent(props) {
                     </ToolbarButton>
                 </ToolbarGroup>
             </BlockControls>
+            <InspectorControls>
+                <PanelBody title="Button Settings" initialOpen={true}>
+                    <PanelRow>
+                        <ColorPalette
+                            colors={colors}
+                            value={currentColorValue}
+                            onChange={(newColor) => {
+                                // From the hex value that the color palette returns, we want to extract the color name
+                                const { name } = getColorObjectByColorValue(colors, newColor);
+                                props.setAttributes({ color: name });
+                            }}
+                            disableCustomColors={true}
+                            clearable={false}
+                        />
+                    </PanelRow>
+                </PanelBody>
+            </InspectorControls>
             <RichText
                 tagName="a"
-                className={`btn btn--${props.attributes.size} btn--blue`}
+                className={`btn btn--${props.attributes.size} btn--${props.attributes.color}`}
                 value={props.attributes.text}
                 allowedFormats={[]}
                 onChange={function (newText) {
@@ -65,6 +92,7 @@ function EditComponent(props) {
             {isLinkPickerVisible &&
                 <Popover
                     position="bottom center"
+                    onFocusOutside={() => { setIsLinkPickerVisible(false) }}
                     onClose={() => { setIsLinkPickerVisible(false) }} >
                     <LinkControl
                         settings={[]}
@@ -85,5 +113,5 @@ function EditComponent(props) {
 }
 
 function SaveComponent(props) {
-    return <a href={props.attributes.linkObject.url} className={`btn btn--${props.attributes.size} btn--blue`}>{props.attributes.text}</a>;
+    return <a href={props.attributes.linkObject.url} className={`btn btn--${props.attributes.size} btn--${props.attributes.color}`}>{props.attributes.text}</a>;
 }

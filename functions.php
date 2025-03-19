@@ -196,14 +196,18 @@ add_filter( 'wp_insert_post_data', 'make_note_private', 10, 2 );
 class JSX_Block {
 
 	private string $name;
+	private bool $render_callback;
+	private array $data;
 
 	/**
 	 * JSX_Block constructor.
 	 *
 	 * @param string $name
 	 */
-	public function __construct( $name ) {
+	public function __construct( $name, $render_callback = false, $data = [] ) {
 		$this->name = $name;
+		$this->render_callback = $render_callback;
+		$this->data = $data;
 		add_action( 'init', [ $this, 'register_block' ] );
 	}
 
@@ -217,12 +221,34 @@ class JSX_Block {
 			[ 'wp-blocks', 'wp-editor' ]
 		);
 
-		register_block_type( "fu-block-theme/$this->name", [ 
-			'editor_script' => "$this->name-block-js"
-		] );
+		if ( ! empty( $this->data ) ) {
+			wp_localize_script( "$this->name-block-js", $this->name, $this->data );
+		}
+
+		$args = [ 'editor_script' => "$this->name-block-js" ];
+
+		if ( $this->render_callback ) {
+			$args['render_callback'] = [ $this, 'block_render' ];
+		}
+
+		register_block_type( "fu-block-theme/$this->name", $args );
+	}
+
+	/**
+	 * Render the block
+	 *
+	 * @param array $attributes
+	 * @param string $content
+	 *
+	 * @return string
+	 */
+	public function block_render( array $attributes, string $content ): string {
+		ob_start();
+		require get_template_directory() . "/blocks/$this->name.php";
+		return ob_get_clean();
 	}
 }
 
-new JSX_Block( 'banner' );
+new JSX_Block( 'banner', true, [ 'fallbackImage' => get_theme_file_uri( '/images/library-hero.jpg' ) ] );
 new JSX_Block( 'generic-heading' );
 new JSX_Block( 'generic-button' );
