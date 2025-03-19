@@ -244,6 +244,8 @@ class Placeholder_Block {
 new Placeholder_Block( 'events-and-blogs' );
 new Placeholder_Block( 'header' );
 new Placeholder_Block( 'footer' );
+new Placeholder_Block( 'singlepost' );
+new Placeholder_Block( 'page' );
 
 class JSX_Block {
 

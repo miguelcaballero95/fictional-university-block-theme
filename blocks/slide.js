@@ -19,7 +19,7 @@ registerBlockType('fu-block-theme/slide', {
         },
         imageURL: {
             type: 'string',
-            default: slider.fallbackImage
+            default: slide.fallbackImage
         }
     },
     edit: EditComponent,
