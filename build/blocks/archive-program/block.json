@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "fu-block-theme/archive-program",
+  "title": "Fictional University Programs Page",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Fictional University Programs Page"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

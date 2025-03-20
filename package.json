@@ -4,10 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "wp-scripts build src/index.js blocks/banner.js blocks/generic-heading.js blocks/generic-button.js blocks/slideshow.js blocks/slide.js",
-        "start": "wp-scripts start src/index.js blocks/banner.js blocks/generic-heading.js blocks/generic-button.js blocks/slideshow.js blocks/slide.js",
-        "dev": "wp-scripts start",
-        "devFast": "wp-scripts start",
+        "build": "run-s buildIndex buildBlocks",
+        "buildBlocks": "wp-scripts build --experimental-modules",
+        "buildIndex": "wp-scripts build src/index.js",
+        "start": "wp-scripts start src/index.js",
+        "blocks": "wp-scripts start --experimental-modules",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
@@ -18,6 +19,7 @@
         "@wordpress/icons": "^10.20.0",
         "@wordpress/scripts": "*",
         "axios": "^0.21.1",
-        "normalize.css": "^8.0.1"
+        "normalize.css": "^8.0.1",
+        "npm-run-all": "^4.1.5"
     }
 }

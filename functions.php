@@ -34,7 +34,7 @@ add_action( 'rest_api_init', 'university_custom_rest' );
  */
 function university_files() {
 
-	wp_enqueue_script( 'google-map', '//maps.googleapis.com/maps/api/js?key=' . GOOGLE_API, null, '1.0', true );
+	wp_enqueue_script( 'google-map', '//maps.googleapis.com/maps/api/js?key=' . GOOGLE_API, [], '1.0', true );
 
 	// Enqueue the main JavaScript file
 	wp_enqueue_script( 'main-university-js', get_theme_file_uri( '/build/index.js' ), [ 'jquery' ], '1.0', true );
@@ -193,118 +193,20 @@ function make_note_private( $data, $postarr ) {
 }
 add_filter( 'wp_insert_post_data', 'make_note_private', 10, 2 );
 
-
-class Placeholder_Block {
-
-	private string $name;
-
-
-	/**
-	 * JSX_Block constructor.
-	 *
-	 * @param string $name
-	 */
-	public function __construct( $name ) {
-		$this->name = $name;
-		add_action( 'init', [ $this, 'register_block' ] );
-	}
-
-	/**
-	 * Register the block
-	 */
-	public function register_block(): void {
-		wp_register_script(
-			"$this->name-block-js",
-			get_template_directory_uri() . "/blocks/$this->name.js",
-			[ 'wp-blocks', 'wp-editor' ]
-		);
-
-
-		register_block_type( "fu-block-theme/$this->name", [ 
-			'editor_script' => "$this->name-block-js",
-			'render_callback' => [ $this, 'block_render' ]
-		] );
-	}
-
-	/**
-	 * Render the block
-	 *
-	 * @param array $attributes
-	 * @param string $content
-	 *
-	 * @return string
-	 */
-	public function block_render( array $attributes, string $content ): string {
-		ob_start();
-		require get_template_directory() . "/blocks/$this->name.php";
-		return ob_get_clean();
-	}
+// Register University Blocks
+function university_blocks() {
+	// register_block_type_from_metadata( __DIR__ . '/build/footer' );
+	register_block_type( __DIR__ . '/build/blocks/footer' );
+	register_block_type( __DIR__ . '/build/blocks/header' );
+	register_block_type( __DIR__ . '/build/blocks/events-and-blogs' );
+	register_block_type( __DIR__ . '/build/blocks/page' );
+	register_block_type( __DIR__ . '/build/blocks/single' );
+	register_block_type( __DIR__ . '/build/blocks/blog' );
+	register_block_type( __DIR__ . '/build/blocks/archive-program' );
+	register_block_type( __DIR__ . '/build/blocks/banner' );
+	register_block_type( __DIR__ . '/build/blocks/generic-button' );
+	register_block_type( __DIR__ . '/build/blocks/generic-heading' );
+	register_block_type( __DIR__ . '/build/blocks/slideshow' );
+	register_block_type( __DIR__ . '/build/blocks/slide' );
 }
-
-new Placeholder_Block( 'events-and-blogs' );
-new Placeholder_Block( 'header' );
-new Placeholder_Block( 'footer' );
-new Placeholder_Block( 'singlepost' );
-new Placeholder_Block( 'page' );
-
-class JSX_Block {
-
-	private string $name;
-	private bool $render_callback;
-	private array $data;
-
-	/**
-	 * JSX_Block constructor.
-	 *
-	 * @param string $name
-	 */
-	public function __construct( $name, $render_callback = false, $data = [] ) {
-		$this->name = $name;
-		$this->render_callback = $render_callback;
-		$this->data = $data;
-		add_action( 'init', [ $this, 'register_block' ] );
-	}
-
-	/**
-	 * Register the block
-	 */
-	public function register_block(): void {
-		wp_register_script(
-			"$this->name-block-js",
-			get_template_directory_uri() . "/build/$this->name.js",
-			[ 'wp-blocks', 'wp-editor' ]
-		);
-
-		if ( ! empty( $this->data ) ) {
-			wp_localize_script( "$this->name-block-js", $this->name, $this->data );
-		}
-
-		$args = [ 'editor_script' => "$this->name-block-js" ];
-
-		if ( $this->render_callback ) {
-			$args['render_callback'] = [ $this, 'block_render' ];
-		}
-
-		register_block_type( "fu-block-theme/$this->name", $args );
-	}
-
-	/**
-	 * Render the block
-	 *
-	 * @param array $attributes
-	 * @param string $content
-	 *
-	 * @return string
-	 */
-	public function block_render( array $attributes, string $content ): string {
-		ob_start();
-		require get_template_directory() . "/blocks/$this->name.php";
-		return ob_get_clean();
-	}
-}
-
-new JSX_Block( 'banner', true, [ 'fallbackImage' => get_theme_file_uri( '/images/library-hero.jpg' ) ] );
-new JSX_Block( 'generic-heading' );
-new JSX_Block( 'generic-button' );
-new JSX_Block( 'slideshow', true );
-new JSX_Block( 'slide', true, [ 'fallbackImage' => get_theme_file_uri( '/images/library-hero.jpg' ) ] );
+add_action( 'init', 'university_blocks' );

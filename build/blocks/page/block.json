@@ -1,0 +1,14 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "fu-block-theme/page",
+  "title": "Fictional University Page Content",
+  "attributes": {
+    "title": {
+      "type": "string",
+      "default": "Fictional University Page Content"
+    }
+  },
+  "editorScript": "file:./index.js",
+  "render": "file:./render.php"
+}

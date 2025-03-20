@@ -1,0 +1,1 @@
+(()=>{"use strict";const e=window.wp.blocks,o=window.wp.blockEditor,s=window.ReactJSXRuntime,n=JSON.parse('{"UU":"fu-block-theme/events-and-blogs"}');(0,e.registerBlockType)(n.UU,{edit:function(){const e=(0,o.useBlockProps)({className:"fu-placeholder-block"});return(0,s.jsx)("div",{...e,children:"Fictional University Events and Blogs"})}})})();

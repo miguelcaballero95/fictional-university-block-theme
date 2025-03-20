@@ -1,0 +1,1 @@
+(()=>{"use strict";const o=window.wp.blocks,e=JSON.parse('{"UU":"fu-block-theme/footer"}'),t=window.wp.blockEditor,c=window.ReactJSXRuntime;(0,o.registerBlockType)(e.UU,{edit:function(){const o=(0,t.useBlockProps)({className:"fu-placeholder-block"});return(0,c.jsx)("div",{...o,children:"Fictional University Footer"})}})})();
