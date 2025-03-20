@@ -47,6 +47,9 @@
                     "name": "Foreground"
                 }
             ]
+        },
+        "layout": {
+            "contentSize": "1000px"
         }
     }
 }
