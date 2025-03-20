@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "wp-scripts build",
+        "build": "wp-scripts build src/index.js blocks/banner.js blocks/generic-heading.js blocks/generic-button.js blocks/slideshow.js blocks/slide.js",
         "start": "wp-scripts start src/index.js blocks/banner.js blocks/generic-heading.js blocks/generic-button.js blocks/slideshow.js blocks/slide.js",
         "dev": "wp-scripts start",
         "devFast": "wp-scripts start",
